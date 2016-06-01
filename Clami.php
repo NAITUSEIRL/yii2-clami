@@ -11,4 +11,7 @@ use yii\base\InvalidConfigException;
  */
 class Clami extends Component{
 	//put your code here
+	 public function init() {
+        
+    }
 }
