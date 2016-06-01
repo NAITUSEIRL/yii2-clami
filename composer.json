@@ -20,11 +20,6 @@
         "psr-4": {
             "jotapeserra\\clami\\": ""
         }
-    },
-    "repositories":[
-		{
-			"type": "git",
-			"url": "/var/www/html/managerctm3/mini-backup-manager/frontend/runtime/tmp-extensions/yii2-clami"
-		}
-	]
+    }
+    
 }
