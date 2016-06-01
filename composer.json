@@ -1,0 +1,21 @@
+{
+    "name": "jotapeserra/yii2-clami",
+    "description": "Yii2 integration library with Clami e-billing plattform in Chile",
+    "type": "library",
+    "keywords": ["yii2","extension","e-billing","chile"," facturacion electronica"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Juan Pablo Serra",
+            "email": "jpserra@ctmgroup.cl"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "jotapeserra\\clami\\": ""
+        }
+    }
+}
