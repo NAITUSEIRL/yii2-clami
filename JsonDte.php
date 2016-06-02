@@ -21,4 +21,10 @@ interface JsonDte {
      * @return string
      */
     public function getJsonDte();
+
+	/*
+	 *
+	 */
+	public function tipoDTE();
+
 }
