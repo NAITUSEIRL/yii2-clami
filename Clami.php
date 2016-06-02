@@ -19,7 +19,7 @@ class Clami extends Component{
     public $host;
     public $port;
     public $api_version;
-	public $enviarDte = 'v2/enviar/dte';
+	public $enviarDte = 'enviar/dte';
 	public $curl;
 	public $result;
 	public $result_documento;
