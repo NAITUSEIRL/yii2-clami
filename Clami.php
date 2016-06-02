@@ -103,6 +103,17 @@ class Clami extends Component{
 		}
 		return false;
 	}
+	public function getError() {
+		if($this->result == null){
+			if($this->result_info != null){
+				return 'Http response: '.$this->result_info['http_code'];
+			}
+
+		}else{
+			return 'Clami response estado : '.$this->result['estado'];
+		}
+		return false;
+	}
 
 	public function getPdf() {
 		if($this->resultOK()){
