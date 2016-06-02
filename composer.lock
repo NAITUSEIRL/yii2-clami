@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c5eec55da684e4ea14f543e8d12b6427",
-    "content-hash": "e6b2d68b930a430d4dacf6bf7c19b1b9",
+    "hash": "bfc183d225e49c578df6dfe21e5283bc",
+    "content-hash": "767e871fadc1ec4e3b9b947a888802be",
     "packages": [
         {
             "name": "bower-asset/jquery",
@@ -390,12 +390,61 @@
                 "yii2"
             ],
             "time": "2016-02-06 00:49:24"
+        },
+        {
+            "name": "yiisoft/yii2-httpclient",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/yii2-httpclient.git",
+                "reference": "32ed4fe4513855690d7e54e2441fe52507510451"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/yii2-httpclient/zipball/32ed4fe4513855690d7e54e2441fe52507510451",
+                "reference": "32ed4fe4513855690d7e54e2441fe52507510451",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "yii\\httpclient\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Paul Klimov",
+                    "email": "klimov.paul@gmail.com"
+                }
+            ],
+            "description": "HTTP client extension for the Yii framework",
+            "keywords": [
+                "curl",
+                "http",
+                "httpclient",
+                "yii2"
+            ],
+            "time": "2016-02-15 09:27:06"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "yiisoft/yii2-httpclient": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
