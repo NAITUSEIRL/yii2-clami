@@ -1,8 +1,9 @@
 <?php
 namespace jotapeserra\clami;
+
 use yii\base\Component;
 use yii\base\InvalidConfigException;
-
+use yii\helpers\Json;
 
 /**
  * Description of Clami
