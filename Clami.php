@@ -49,7 +49,7 @@ class Clami extends Component{
 		$this->prepareCurl();
 		$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
 
-		$this->result = curl_exec($this->curl);
+		$this->result = json_decode(curl_exec($this->curl));
 		$this->info_result = curl_getinfo($this->curl);
 		curl_close($this->curl);
 		$out = [
