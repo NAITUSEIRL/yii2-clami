@@ -47,7 +47,7 @@ class Clami extends Component{
 			$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
 
 			$result = curl_exec($this->curl);
-			$out = array_merge($result, curl_getinfo($this->curl) );
+			$out = array_merge(['result', $result], curl_getinfo($this->curl) );
 
             \Yii::trace('Info Respuesta Curl: ' . print_r($out, true), __METHOD__);
             curl_close($this->curl);
