@@ -18,10 +18,12 @@ class Clami extends Component{
     public $token;
     public $host;
     public $port;
+    public $api_version;
 	public $enviarDte = 'v2/enviar/dte';
 	public $curl;
 	public $result;
-	public $info_result;
+	public $result_documento;
+	public $result_info;
 
 	public function init() {
         if (empty($this->token)) {
@@ -33,46 +35,27 @@ class Clami extends Component{
         if (empty($this->port)) {
 			$this->port = 8000;
         }
+        if (empty($this->api_version)) {
+			$this->api_version = 'v2';
+        }
         if (empty($this->enviarDte)) {
-			$this->enviarDte = 'v2/enviar/dte';
+			$this->enviarDte = 'enviar/dte';
         }
     }
 
-	public function enviarDte($data, $format = 'json') {
-		if($format != 'json'){
-			$jsonData = json_encode($data);
-		}else{
-			$jsonData = $data;
-		}
-		\Yii::trace('enviarDte to Clami API: token:'.$this->token.' url:' . $this->getUrl('enviarDte'), 'Clami'.__METHOD__);
-		$this->curl = curl_init($this->getUrl('enviarDte'));
-		$this->prepareCurl();
-		$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
-
-		$this->result = json_decode(curl_exec($this->curl));
-		$this->info_result = curl_getinfo($this->curl);
-		curl_close($this->curl);
-		$out = [
-			'result' => $this->result,
-			'info' => $this->info_result,
-		];
-		\Yii::trace('Info Respuesta Curl: ' . print_r($out, true), __METHOD__);
-		return $this;
-	}
-
-	public function getUrl($action = 'enviarDte') {
+	private function getUrl($action = 'enviarDte') {
 		$url = $this->host.':'.$this->port;
 		if($action == 'enviarDte'){
-			$url .= '/'.$this->enviarDte;
+			$url .= '/'.$this->api_version.'/'.$this->enviarDte;
 		}
 		return $url;
 	}
 
-	public function setCurlOption($option, $value) {
+	private function setCurlOption($option, $value) {
 		curl_setopt($this->curl, $option, $value);
 	}
 
-	public function prepareCurl($action = 'enviarDte') {
+	private function prepareCurl($action = 'enviarDte') {
 		$headers = array(
             "Content-type: application/json",
             "Accept: application/json",
@@ -83,6 +66,60 @@ class Clami extends Component{
 		$this->setCurlOption(CURLOPT_CONNECTTIMEOUT, 500);
 		$this->setCurlOption(CURLOPT_TIMEOUT, 1000);
 		$this->setCurlOption(CURLOPT_RETURNTRANSFER, true);
+	}
+
+	public function enviarDte($data, $format = 'json') {
+		//limpiar respuestas
+		$this->result = null;
+		$this->result_info = null;
+
+		//preparar datos
+		if($format != 'json'){
+			$jsonData = json_encode($data);
+		}else{
+			$jsonData = $data;
+		}
+
+
+		//envio a Clami
+		\Yii::trace('enviarDte to Clami API: token:'.$this->token.' url:' . $this->getUrl('enviarDte'), 'Clami'.__METHOD__);
+		$this->curl = curl_init($this->getUrl('enviarDte'));
+		$this->prepareCurl();
+		$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
+
+		//procesar
+		$this->result = json_decode(curl_exec($this->curl));
+		$this->result_documento = $this->result['documento'][0];
+		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
+		$this->result_info = curl_getinfo($this->curl);
+		curl_close($this->curl);
+
+		return $this;
+	}
+
+	public function resultOK() {
+		if($this->result != null && $this->result['estado'] == 'OK'){
+			return true;
+		}
+		return false;
+	}
+
+	public function getPdf() {
+		if($this->resultOK()){
+			$url = $this->result_documento['pdf'];
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+			$data = curl_exec($ch);
+			curl_close($ch);
+
+			return $data;
+		}
+		return false;
 	}
 
 }
