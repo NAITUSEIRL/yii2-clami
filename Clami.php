@@ -20,6 +20,8 @@ class Clami extends Component{
     public $port;
 	public $enviarDte = 'v2/enviar/dte';
 	public $curl;
+	public $result;
+	public $info_result;
 
 	public function init() {
         if (empty($this->token)) {
@@ -43,22 +45,19 @@ class Clami extends Component{
 			$jsonData = $data;
 		}
 		\Yii::trace('enviarDte to Clami API: token:'.$this->token.' url:' . $this->getUrl('enviarDte'), 'Clami'.__METHOD__);
-            $this->curl = curl_init($this->getUrl('enviarDte'));
-			$this->prepareCurl();
-			$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
+		$this->curl = curl_init($this->getUrl('enviarDte'));
+		$this->prepareCurl();
+		$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
 
-			$result = curl_exec($this->curl);
-			$out = [
-				'result' => Json::decode($result),
-				'info' => curl_getinfo($this->curl),
-			];
-
-            \Yii::trace('Info Respuesta Curl: ' . print_r($out, true), __METHOD__);
-            curl_close($this->curl);
-			return $out;
-//            $prodAPI = Json::decode($result);
-//            $prod = new Productos();
-//            $prod->idProductoOrigen = $prodAPI['idProducto'];
+		$this->result = curl_exec($this->curl);
+		$this->info_result = curl_getinfo($this->curl);
+		curl_close($this->curl);
+		$out = [
+			'result' => $this->result,
+			'info' => $this->info_result,
+		];
+		\Yii::trace('Info Respuesta Curl: ' . print_r($out, true), __METHOD__);
+		return $this;
 	}
 
 	public function getUrl($action = 'enviarDte') {
@@ -85,4 +84,5 @@ class Clami extends Component{
 		$this->setCurlOption(CURLOPT_TIMEOUT, 1000);
 		$this->setCurlOption(CURLOPT_RETURNTRANSFER, true);
 	}
+
 }
