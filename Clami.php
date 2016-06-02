@@ -89,8 +89,8 @@ class Clami extends Component{
 
 		//procesar
 		$this->result = json_decode(curl_exec($this->curl));
-		$this->result_documento = $this->result['documento'][0];
 		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
+		$this->result_documento = $this->result['documento'][0];
 		$this->result_info = curl_getinfo($this->curl);
 		curl_close($this->curl);
 
