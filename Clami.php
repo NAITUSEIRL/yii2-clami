@@ -27,6 +27,7 @@ class Clami extends Component{
 	public $result_documento;
 	public $result_info;
 	public $testData;
+	public $jsonEncodeOption = JSON_UNESCAPED_UNICODE;
 
 	public function init() {
         if (empty($this->token)) {
@@ -81,7 +82,7 @@ class Clami extends Component{
 
 		//preparar datos
 		if($format != 'json'){
-			$this->jsonData = Json::encode($data, JSON_UNESCAPED_UNICODE);
+			$this->jsonData = Json::encode($data, $this->jsonEncodeOption);
 		}else{
 			$this->jsonData = $data;
 		}
@@ -106,7 +107,7 @@ class Clami extends Component{
 				"RznSoc" => "CONTACTO INFORMÁTICA LIMITADA",
 				"DirOrigen" => "AV. ARGENTINA 515"
 			];
-			$this->jsonData = Json::encode($phpData, JSON_UNESCAPED_UNICODE);
+			$this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
 		}
 
 
@@ -152,7 +153,7 @@ class Clami extends Component{
 		return false;
 	}
 	public function getJson() {
-		return Json::encode(Json::decode($this->jsonData), JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+		return Json::encode(Json::decode($this->jsonData), JSON_PRETTY_PRINT | $this->jsonEncodeOption);
 	}
 
 	public function getPdf() {
