@@ -129,8 +129,7 @@ class Clami extends Component{
 			try{
 				$this->result_documento = $this->result['documentos'][0];
 			} catch (\Exception $ex) {
-//				$this->result['estado'] = $ex->getMessage();
-
+				
 			}
 		} catch (\yii\base\InvalidParamException $ex) {
 			$this->result['estado'] = $ex->getName();
