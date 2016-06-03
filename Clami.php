@@ -91,6 +91,7 @@ class Clami extends Component{
 		//procesar
 		$raw = curl_exec($this->curl);
 		\Yii::trace('Info Respuesta Curl: ' . print_r($raw, true), __METHOD__);
+		$this->result_raw = $raw;
 		try{
 			$this->result = Json::decode($raw);
 		} catch (Exception $ex) {
@@ -110,14 +111,15 @@ class Clami extends Component{
 		}
 		return false;
 	}
-	public function getError() {
+	public function getError($full = false) {
+		$extra = $full ? '<br>Raw result:<br>'.$this->result_raw : '';
 		if($this->result == null){
 			if($this->result_info != null){
-				return 'Http response: '.$this->result_info['http_code'];
+				return 'Http response: '.$this->result_info['http_code'].$extra;
 			}
 
 		}else{
-			return 'Clami response estado : '.$this->result['estado'];
+			return 'Clami response estado : '.$this->result['estado'].$extra;
 		}
 		return false;
 	}
