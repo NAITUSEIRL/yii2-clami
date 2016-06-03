@@ -27,7 +27,7 @@ class Clami extends Component{
 	public $result_documento;
 	public $result_info;
 	public $testData;
-	public $jsonEncodeOption = JSON_UNESCAPED_UNICODE;
+	public $jsonEncodeOption;
 
 	public function init() {
         if (empty($this->token)) {
@@ -47,6 +47,9 @@ class Clami extends Component{
         }
         if (empty($this->testData)) {
 			$this->testData = false;
+        }
+        if (empty($this->jsonEncodeOption)) {
+			$this->jsonEncodeOption = JSON_UNESCAPED_UNICODE;
         }
     }
 
