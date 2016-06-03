@@ -122,7 +122,7 @@ class Clami extends Component{
 		return false;
 	}
 	public function getJson() {
-		return Json::encode($this->jsonData, JSON_PRETTY_PRINT);
+		return Json::encode(Json::decode($this->jsonData), JSON_PRETTY_PRINT);
 	}
 
 	public function getPdf() {
