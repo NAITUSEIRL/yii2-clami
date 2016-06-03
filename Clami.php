@@ -21,6 +21,7 @@ class Clami extends Component{
     public $api_version;
 	public $enviarDte = 'enviar/dte';
 	public $curl;
+	public $jsonData;
 	public $result;
 	public $result_documento;
 	public $result_info;
@@ -75,9 +76,9 @@ class Clami extends Component{
 
 		//preparar datos
 		if($format != 'json'){
-			$jsonData = json_encode($data);
+			$this->jsonData = json_encode($data);
 		}else{
-			$jsonData = $data;
+			$this->jsonData = $data;
 		}
 
 
@@ -85,12 +86,16 @@ class Clami extends Component{
 		\Yii::trace('enviarDte to Clami API: token:'.$this->token.' url:' . $this->getUrl('enviarDte'), 'Clami'.__METHOD__);
 		$this->curl = curl_init($this->getUrl('enviarDte'));
 		$this->prepareCurl();
-		$this->setCurlOption(CURLOPT_POSTFIELDS, $jsonData);
+		$this->setCurlOption(CURLOPT_POSTFIELDS, $this->jsonData);
 
 		//procesar
 		$raw = curl_exec($this->curl);
 		\Yii::trace('Info Respuesta Curl: ' . print_r($raw, true), __METHOD__);
-		$this->result = Json::decode($raw);
+		try{
+			$this->result = Json::decode($raw);
+		} catch (Exception $ex) {
+			$this->result['estado'] = 'InvalidResponse';
+		}
 		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 		$this->result_documento = $this->result['documentos'][0];
 		$this->result_info = curl_getinfo($this->curl);
