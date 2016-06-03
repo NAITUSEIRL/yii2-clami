@@ -22,6 +22,7 @@ class Clami extends Component{
 	public $enviarDte = 'enviar/dte';
 	public $curl;
 	public $jsonData;
+	public $result_raw;
 	public $result;
 	public $result_documento;
 	public $result_info;
