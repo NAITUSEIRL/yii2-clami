@@ -129,7 +129,7 @@ class Clami extends Component{
 			try{
 				$this->result_documento = $this->result['documentos'][0];
 			} catch (\Exception $ex) {
-				
+
 			}
 		} catch (\yii\base\InvalidParamException $ex) {
 			$this->result['estado'] = $ex->getName();
@@ -177,6 +177,13 @@ class Clami extends Component{
 			curl_close($ch);
 
 			return $data;
+		}
+		return false;
+	}
+
+	public function getFolio() {
+		if($this->resultOK()){
+			return $this->result_documento['folio'];
 		}
 		return false;
 	}
