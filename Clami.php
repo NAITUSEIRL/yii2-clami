@@ -101,7 +101,7 @@ class Clami extends Component{
 				"NroResol" => "0",
 				"FchResol" => "2014-03-04"
 			];
-			$phpData['Documentos']['Encabezado']['Emisor'] = [
+			$phpData['Documentos'][0]['Encabezado']['Emisor'] = [
 				"RUTEmisor" => "78961710-4",
 				"CiudadOrigen" => "SANTIAGO",
 				"Acteco" => "726000",
