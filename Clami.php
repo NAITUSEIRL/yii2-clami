@@ -122,7 +122,7 @@ class Clami extends Component{
 		$this->result_raw = $raw;
 		try{
 			$this->result = Json::decode($raw);
-		} catch (Exception $ex) {
+		} catch (yii\base\InvalidParamException $ex) {
 			$this->result['estado'] = 'InvalidResponse';
 		}
 		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
