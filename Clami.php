@@ -129,6 +129,8 @@ class Clami extends Component{
 			$this->result_documento = $this->result['documentos'][0];
 		} catch (\yii\base\InvalidParamException $ex) {
 			$this->result['estado'] = $ex->getName();
+		} catch (\Exception $ex) {
+			$this->result['estado'] = $ex->getMessage();
 		}
 		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 		$this->result_info = curl_getinfo($this->curl);
