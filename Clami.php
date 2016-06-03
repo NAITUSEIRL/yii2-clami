@@ -26,6 +26,7 @@ class Clami extends Component{
 	public $result;
 	public $result_documento;
 	public $result_info;
+	public $testData;
 
 	public function init() {
         if (empty($this->token)) {
@@ -42,6 +43,9 @@ class Clami extends Component{
         }
         if (empty($this->enviarDte)) {
 			$this->enviarDte = 'enviar/dte';
+        }
+        if (empty($this->testData)) {
+			$this->testData = false;
         }
     }
 
@@ -77,9 +81,32 @@ class Clami extends Component{
 
 		//preparar datos
 		if($format != 'json'){
-			$this->jsonData = json_encode($data);
+			$this->jsonData = Json::encode($data);
 		}else{
 			$this->jsonData = $data;
+		}
+
+		//testData
+		if($this->testData){
+			$phpData = Json::decode($this->jsonData);
+			$phpData['Caratula'] = [
+				"RutEmisor" => "78961710-4",
+				"TmstFirmaEnv" => "R",
+				"RutReceptor" => "60803000-K",
+				"RutEnvia" => "8033340-4",
+				"NroResol" => "0",
+				"FchResol" => "2014-03-04"
+			];
+			$phpData['Documentos']['Encabezado']['Emisor'] = [
+				"RUTEmisor" => "78961710-4",
+				"CiudadOrigen" => "SANTIAGO",
+				"Acteco" => "726000",
+				"GiroEmis" => "SERVICIOS INTEGRALES DE INFORMATICA",
+				"CmnaOrigen" => "SAN BERNARDO",
+				"RznSoc" => "CONTACTO INFORMÁTICA LIMITADA",
+				"DirOrigen" => "AV. ARGENTINA 515"
+			];
+			$this->jsonData = Json::encode($phpData);
 		}
 
 
