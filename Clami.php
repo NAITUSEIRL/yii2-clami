@@ -122,8 +122,8 @@ class Clami extends Component{
 		$this->result_raw = $raw;
 		try{
 			$this->result = Json::decode($raw);
-		} catch (yii\base\InvalidParamException $ex) {
-			$this->result['estado'] = 'InvalidResponse';
+		} catch (\yii\base\InvalidParamException $ex) {
+			$this->result['estado'] = $ex->getName();
 		}
 		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 		$this->result_documento = $this->result['documentos'][0];
