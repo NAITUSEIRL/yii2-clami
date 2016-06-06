@@ -151,11 +151,21 @@ class Clami extends Component{
 		$extra = $full ? '<br>Raw result:<br>'.$this->result_raw : '';
 		if($this->result == null){
 			if($this->result_info != null){
+				if($this->result_info['http_code'] == 0){
+					return 'Servicio Clami no se encuentra activo: '.$this->result_info['http_code'].$extra;
+
+				}
 				return 'Http response: '.$this->result_info['http_code'].$extra;
 			}
 
 		}else{
-			return 'Clami response estado : '.$this->result['estado'].$extra;
+			$det = '';
+			if(is_array($this->result['detalle'])){
+				foreach ($this->result['detalle'] as $key => $detalle) {
+					$det .= '<br>'.$detalle;
+				}
+			}
+			return 'Clami cogido Respuesta: '.$this->result['codigo'].', estado : '.$this->result['estado'].'. Detalle:'.$det.$extra;
 		}
 		return false;
 	}
