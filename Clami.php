@@ -162,10 +162,10 @@ class Clami extends Component{
 			$det = '';
 			if(is_array($this->result['detalle'])){
 				foreach ($this->result['detalle'] as $key => $detalle) {
-					$det .= '<br>'.$detalle;
+				$det .= "\n".$detalle;
 				}
 			}
-			return 'Clami cogido Respuesta: '.$this->result['codigo'].', estado : '.$this->result['estado'].'. Detalle:'.$det.$extra;
+			return 'Clami Código: '.$this->result['codigo'].', estado : '.$this->result['estado'].'. Detalle:'.$det.$extra;
 		}
 		return false;
 	}
