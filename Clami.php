@@ -122,7 +122,7 @@ class Clami extends Component{
 
 		//procesar
 		$raw = curl_exec($this->curl);
-		\Yii::trace('Info Respuesta Curl: ' . print_r($raw, true), __METHOD__);
+		\Yii::trace('Info Respuesta Raw: ' . print_r($raw, true), __METHOD__);
 		$this->result_raw = $raw;
 		try{
 			$this->result = Json::decode($raw);
