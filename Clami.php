@@ -160,7 +160,7 @@ class Clami extends Component{
 
 		}else{
 			$det = '';
-			if(is_array($this->result['detalle'])){
+			if(array_key_exists('detalle',$this->result) && is_array($this->result['detalle'])){
 				foreach ($this->result['detalle'] as $key => $detalle) {
 				$det .= "\n".$detalle;
 				}
