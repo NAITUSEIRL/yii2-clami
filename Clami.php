@@ -143,7 +143,7 @@ class Clami extends Component{
 	}
 
 	public function resultOK() {
-		if($this->result != null && $this->result['estado'] == 'OK'){
+		if($this->result != null && $this->result['codigo'] == 200 && $this->result['estado'] == 'OK'){
 			return true;
 		}
 		return false;
