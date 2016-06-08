@@ -175,7 +175,7 @@ class Clami extends Component{
 	}
 
 	public function getPdf() {
-		if($this->resultOK()){
+		if($this->resultOK() && is_array($this->result_documento) && array_key_exists('pdf', $this->result_documento) && strlen($this->result_documento['pdf'])>0){
 			$url = $this->result_documento['pdf'];
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
