@@ -89,6 +89,7 @@ class Clami extends Component{
 		}else{
 			$this->jsonData = $data;
 		}
+		\Yii::trace('Json de envio:'.$this->jsonData, 'Clami'.__METHOD__);
 
 		//testData
 		if($this->testData){
