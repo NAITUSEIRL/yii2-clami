@@ -166,7 +166,7 @@ class Clami extends Component{
 				$det .= "\n".$detalle;
 				}
 			}
-			return 'Clami Código: '.$this->result['codigo'].', estado : '.$this->result['estado'].'. Detalle:'.$det.$extra;
+			return 'Clami Código: '.$this->result['codigo'].'. Detalle:'.$det.$extra;
 		}
 		return false;
 	}
