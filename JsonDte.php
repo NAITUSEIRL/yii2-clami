@@ -27,6 +27,4 @@ interface JsonDte {
 	 */
 	public function tipoDTE();
 
-	public function getDocumentoRef();
-
 }
