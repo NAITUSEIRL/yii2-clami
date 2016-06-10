@@ -206,7 +206,6 @@ class Clami extends Component{
 				$this->errors[] ='Resultado enviar DTE a Clami sin codigo de respuesta.';
 
 			}
-			$this->result_documento = $this->result['documentos'][0];
 		} catch (\yii\base\InvalidParamException $ex) {
 			if($this->result_info != null && $this->result_info['http_code'] == 0){
 					$this->errors[] = 'Servicio Clami no se encuentra activo: '.$this->result_info['http_code'].$extra;
