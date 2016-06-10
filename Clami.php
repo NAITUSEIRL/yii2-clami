@@ -159,7 +159,7 @@ class Clami extends Component{
 			\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 			//campos devolucion
 			if(!is_array($this->result)){
-				throw new \Exception();
+				throw new \Exception('Formato Respuesta invalido');
 			}
 			if(array_key_exists('codigo', $this->result)){
 				$this->codigo = $this->result['codigo'];
@@ -210,7 +210,7 @@ class Clami extends Component{
 				$this->errors[] ='Resultado enviar DTE a Clami sin codigo de respuesta.';
 
 			}
-		} catch (\yii\base\InvalidParamException $ex) {
+		} catch (\Exception $ex) {
 			if($this->result_info != null && $this->result_info['http_code'] == 0){
 					$this->errors[] = 'Servicio Clami no se encuentra activo: '.$this->result_info['http_code'].$extra;
 			}else{
