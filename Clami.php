@@ -158,7 +158,10 @@ class Clami extends Component{
 			$this->result = Json::decode($result_raw);
 			\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 			//campos devolucion
-			if(is_array($this->result) && array_key_exists('codigo', $this->result)){
+			if(!is_array($this->result)){
+				throw new \Exception();
+			}
+			if(array_key_exists('codigo', $this->result)){
 				$this->codigo = $this->result['codigo'];
 				if( array_key_exists('estado', $this->result)){
 					$this->estado = $this->result['estado'];
