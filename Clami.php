@@ -212,7 +212,7 @@ class Clami extends Component{
 			}
 		} catch (\Exception $ex) {
 			if($this->result_info != null && $this->result_info['http_code'] == 0){
-					$this->errors[] = 'Servicio Clami no se encuentra activo: '.$this->result_info['http_code'].$extra;
+					$this->errors[] = 'Servicio Clami no se encuentra activo. Codigo Http respuesta'.$this->result_info['http_code'];
 			}else{
 				$this->errors[] ='Resultado enviar DTE a Clami no se pudo procesar como JSON. '.$ex->getName();
 			}
