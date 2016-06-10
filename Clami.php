@@ -25,7 +25,6 @@ class Clami extends Component{
 	public $result_raw;
 	public $result;
 	public $result_documento;
-	public $result_documento;
 	public $result_info;
 	public $testData;
 	public $jsonEncodeOption;
