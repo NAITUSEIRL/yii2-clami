@@ -191,7 +191,9 @@ class Clami extends Component{
 						$this->errors[] ='Respuesta sistema Clami Ok pero no se pudo obtener los datos necesarios. '.$ex->getName();
 					}
 				}else{
-					$this->errors[] =$this->estado;
+					if(strlen($this->estado) >0 ){
+						$this->errors[] =$this->estado;
+					}
 					//se recibe algun error
 					if(array_key_exists('detalle',$this->result) ){
 						if(is_array($this->result['detalle'])){
