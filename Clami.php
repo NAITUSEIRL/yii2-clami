@@ -25,9 +25,18 @@ class Clami extends Component{
 	public $result_raw;
 	public $result;
 	public $result_documento;
+	public $result_documento;
 	public $result_info;
 	public $testData;
 	public $jsonEncodeOption;
+
+	public $codigo;
+	public $estado;
+	public $pdf;
+	public $xml;
+	public $folio;
+	public $errors;
+
 
 	public function init() {
         if (empty($this->token)) {
@@ -78,10 +87,23 @@ class Clami extends Component{
 		$this->setCurlOption(CURLOPT_RETURNTRANSFER, true);
 	}
 
-	public function enviarDte($data, $format = 'json') {
+	private function resetValues() {
 		//limpiar respuestas
 		$this->result = null;
 		$this->result_info = null;
+		$this->result_ok = false;
+		$this->codigo = null;
+		$this->estado = null;
+		$this->pdf = null;
+		$this->xml = null;
+		$this->pdf = null;
+		$this->errors = [];
+	}
+
+
+	public function enviarDte($data, $format = 'json') {
+		//limpiar respuestas
+		$this->resetValues();
 
 		//preparar datos
 		if($format != 'json'){
@@ -114,7 +136,6 @@ class Clami extends Component{
 			$this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
 		}
 
-
 		//envio a Clami
 		\Yii::trace('enviarDte to Clami API: token:'.$this->token.' url:' . $this->getUrl('enviarDte'), 'Clami'.__METHOD__);
 		$this->curl = curl_init($this->getUrl('enviarDte'));
@@ -125,57 +146,91 @@ class Clami extends Component{
 		$raw = curl_exec($this->curl);
 		\Yii::trace('Info Respuesta Raw: ' . print_r($raw, true), __METHOD__);
 		$this->result_raw = $raw;
-		try{
-			$this->result = Json::decode($raw);
-			try{
-				$this->result_documento = $this->result['documentos'][0];
-			} catch (\Exception $ex) {
-
-			}
-		} catch (\yii\base\InvalidParamException $ex) {
-			$this->result['estado'] = $ex->getName();
-		}
-		\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 		$this->result_info = curl_getinfo($this->curl);
+		$this->parsearResultados($this->result_raw);
 		curl_close($this->curl);
 
 		return $this;
 	}
 
+	private function parsearResultados($result_raw) {
+		try{
+			$this->result = Json::decode($raw);
+			\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
+			//campos devolucion
+			if( array_key_exists('codigo', $this->result)){
+				$this->codigo = $this->result['codigo'];
+				if( array_key_exists('estado', $this->result)){
+					$this->estado = $this->result['estado'];
+				}
+
+				if($this->codigo == 200 && $this->estado == 'OK'){
+					//resultado Ok, guardar pdf, folio, xml
+					try{
+						$this->result_documento = $this->result['documentos'][0];
+						$this->pdf = $this->result_documento['pdf'];
+						$this->xml = $this->result_documento['xml'];
+						$this->folio = $this->result_documento['folio'];
+						$validator = new \yii\validators\UrlValidator();
+						$validatorNum = new \yii\validators\NumberValidator();
+
+						if(!$validator->validate($this->pdf, $this->errors)){
+							throw new \Exception('error en valor del campo Pdf');
+						}
+						if(!$validator->validate($this->xml, $this->errors)){
+							throw new \Exception('error en valor del campo xml');
+						}
+						if(!$validatorNum->validate($this->folio, $this->errors)){
+							throw new \Exception('error en valor del campo Folio');
+						}
+						$this->result_ok = true;
+					} catch (\Exception $ex) {
+						$this->errors[] ='Respuesta sistema Clami Ok pero no se pudo obtener los datos necesarios. '.$ex->getName();
+					}
+				}else{
+					//se recibe algun error
+					if(array_key_exists('detalle',$this->result) && is_array($this->result['detalle'])){
+						foreach ($this->result['detalle'] as $key => $detalle) {
+							if(is_array($detalle)){
+								foreach ($detalle as $deta) {
+									$this->errors[] = $deta;
+								}
+							}else{
+								$this->errors[] = $detalle;
+							}
+						}
+					}
+				}
+
+			}else{
+				$this->errors[] ='Resultado enviar DTE a Clami sin codigo de respuesta.';
+
+			}
+			$this->result_documento = $this->result['documentos'][0];
+		} catch (\yii\base\InvalidParamException $ex) {
+			if($this->result_info != null && $this->result_info['http_code'] == 0){
+					$this->errors[] = 'Servicio Clami no se encuentra activo: '.$this->result_info['http_code'].$extra;
+			}else{
+				$this->errors[] ='Resultado enviar DTE a Clami no se pudo procesar como JSON. '.$ex->getName();
+			}
+//			$this->result['estado'] = $ex->getName();
+		}
+	}
+
 	public function resultOK() {
-		if($this->result != null && $this->result['codigo'] == 200 && $this->result['estado'] == 'OK'){
+		if($this->result_ok){
 			return true;
 		}
 		return false;
 	}
 	public function getError($full = false) {
+		if($this->resultOK()) return false;
 		$extra = $full ? '<br>Raw result:<br>'.$this->result_raw : '';
-		if($this->result == null){
-			if($this->result_info != null){
-				if($this->result_info['http_code'] == 0){
-					return 'Servicio Clami no se encuentra activo: '.$this->result_info['http_code'].$extra;
-
-				}
-				return 'Http response: '.$this->result_info['http_code'].$extra;
-			}
-
-		}else{
-			$det = '';
-			if(array_key_exists('detalle',$this->result) && is_array($this->result['detalle'])){
-				foreach ($this->result['detalle'] as $key => $detalle) {
-					if(is_array($detalle)){
-						foreach ($detalle as $deta) {
-							$det .= "\n".$deta;
-
-						}
-					}else{
-						$det .= "\n".$detalle;
-					}
-				}
-			}
-			return 'Clami Código: '.$this->result['codigo'].'. Detalle:'.$det.$extra;
+		$errorStr = '';
+		foreach ($this->errors as $error) {
+			$errorStr .= "\n".$error;
 		}
-		return false;
+		return 'Clami Código: '.$this->result['codigo'].'. Detalle:'.$errorStr.$extra;
 	}
 	public function getJson() {
 		return Json::encode(Json::decode($this->jsonData), JSON_PRETTY_PRINT | $this->jsonEncodeOption);
