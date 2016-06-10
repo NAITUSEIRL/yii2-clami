@@ -158,7 +158,7 @@ class Clami extends Component{
 			$this->result = Json::decode($result_raw);
 			\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 			//campos devolucion
-			if( array_key_exists('codigo', $this->result)){
+			if(is_array($this->result) && array_key_exists('codigo', $this->result)){
 				$this->codigo = $this->result['codigo'];
 				if( array_key_exists('estado', $this->result)){
 					$this->estado = $this->result['estado'];
@@ -237,8 +237,25 @@ class Clami extends Component{
 	}
 
 	public function getPdf() {
-		if($this->resultOK() && is_array($this->result_documento) && array_key_exists('pdf', $this->result_documento) && strlen($this->result_documento['pdf'])>0){
-			$url = $this->result_documento['pdf'];
+		if($this->resultOK() ){
+			$url = $this->pdf;
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+
+			$data = curl_exec($ch);
+			curl_close($ch);
+
+			return $data;
+		}
+		return false;
+	}
+	public function getXml() {
+		if($this->resultOK() ){
+			$url = $this->xml;
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
 			curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -256,7 +273,7 @@ class Clami extends Component{
 
 	public function getFolio() {
 		if($this->resultOK()){
-			return $this->result_documento['folio'];
+			return $this->folio;
 		}
 		return false;
 	}
