@@ -163,7 +163,14 @@ class Clami extends Component{
 			$det = '';
 			if(array_key_exists('detalle',$this->result) && is_array($this->result['detalle'])){
 				foreach ($this->result['detalle'] as $key => $detalle) {
-				$det .= "\n".$detalle;
+					if(is_array($detalle)){
+						foreach ($detalle as $deta) {
+							$det .= "\n".$deta;
+
+						}
+					}else{
+						$det .= "\n".$detalle;
+					}
 				}
 			}
 			return 'Clami Código: '.$this->result['codigo'].'. Detalle:'.$det.$extra;
