@@ -210,7 +210,7 @@ class Clami extends Component{
 
 					}
 					//se recibe algun error
-					if(array_key_exists('glosa',$this->result) && is_array($this->result['glosa'])){
+					if(array_key_exists('glosa',$this->result))){
 						if(is_array($this->result['glosa'])){
 							foreach ($this->result['glosa'] as $glosa) {
 								if(is_array($glosa)){
