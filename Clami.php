@@ -204,6 +204,18 @@ class Clami extends Component{
 							}
 						}
 					}
+					//se recibe algun error
+					if(array_key_exists('glosa',$this->result) && is_array($this->result['glosa'])){
+						foreach ($this->result['glosa'] as $key => $glosa) {
+							if(is_array($glosa)){
+								foreach ($glosa as $glo) {
+									$this->errors[] = $glo;
+								}
+							}else{
+								$this->errors[] = $glosa;
+							}
+						}
+					}
 				}
 
 			}else{
@@ -229,7 +241,7 @@ class Clami extends Component{
 	public function getError($full = false) {
 		if($this->resultOK()) return false;
 		$extra = $full ? '<br>Raw result:<br>'.$this->result_raw : '';
-		$errorStr = '';
+		$errorStr = 'Errores \n';
 		foreach ($this->errors as $error) {
 			$errorStr .= "\n".$error;
 		}
