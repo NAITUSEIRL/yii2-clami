@@ -155,7 +155,7 @@ class Clami extends Component{
 
 	private function parsearResultados($result_raw) {
 		try{
-			$this->result = Json::decode($raw);
+			$this->result = Json::decode($result_raw);
 			\Yii::trace('Info Respuesta Curl: ' . print_r($this->result, true), __METHOD__);
 			//campos devolucion
 			if( array_key_exists('codigo', $this->result)){
