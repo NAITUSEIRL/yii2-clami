@@ -193,27 +193,36 @@ class Clami extends Component{
 				}else{
 					$this->errors[] =$this->estado;
 					//se recibe algun error
-					if(array_key_exists('detalle',$this->result) && is_array($this->result['detalle'])){
-						foreach ($this->result['detalle'] as $key => $detalle) {
-							if(is_array($detalle)){
-								foreach ($detalle as $deta) {
-									$this->errors[] = $deta;
+					if(array_key_exists('detalle',$this->result) ){
+						if(is_array($this->result['detalle'])){
+							foreach ($this->result['detalle'] as $detalle) {
+								if(is_array($detalle)){
+									foreach ($detalle as $deta) {
+										$this->errors[] = $deta;
+									}
+								}else{
+									$this->errors[] = $detalle;
 								}
-							}else{
-								$this->errors[] = $detalle;
 							}
+						}else{
+							$this->errors[] = $this->result['detalle'];
 						}
+
 					}
 					//se recibe algun error
 					if(array_key_exists('glosa',$this->result) && is_array($this->result['glosa'])){
-						foreach ($this->result['glosa'] as $key => $glosa) {
-							if(is_array($glosa)){
-								foreach ($glosa as $glo) {
-									$this->errors[] = $glo;
+						if(is_array($this->result['glosa'])){
+							foreach ($this->result['glosa'] as $glosa) {
+								if(is_array($glosa)){
+									foreach ($glosa as $glo) {
+										$this->errors[] = $glo;
+									}
+								}else{
+									$this->errors[] = $glosa;
 								}
-							}else{
-								$this->errors[] = $glosa;
 							}
+						}else{
+							$this->errors[] = $this->result['glosa'];
 						}
 					}
 				}
@@ -241,11 +250,11 @@ class Clami extends Component{
 	public function getError($full = false) {
 		if($this->resultOK()) return false;
 		$extra = $full ? '<br>Raw result:<br>'.$this->result_raw : '';
-		$errorStr = 'Errores \n';
+		$errorStr = '';
 		foreach ($this->errors as $error) {
 			$errorStr .= "\n".$error;
 		}
-		return 'Clami Código: '.$this->result['codigo'].'. Detalle:'.$errorStr.$extra;
+		return 'Clami '.$this->estado.'Código: '.$this->codigo.'. Detalle:'.$errorStr.$extra;
 	}
 	public function getJson() {
 		return Json::encode(Json::decode($this->jsonData), JSON_PRETTY_PRINT | $this->jsonEncodeOption);
