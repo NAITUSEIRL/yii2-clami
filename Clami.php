@@ -188,7 +188,7 @@ class Clami extends Component{
 						}
 						$this->result_ok = true;
 					} catch (\Exception $ex) {
-						$this->errors[] ='Respuesta sistema Clami Ok pero no se pudo obtener los datos necesarios. '.$ex->getMessage();
+						$this->errors[] ='Respuesta sistema Clami Ok pero no se pudo obtener los datos necesarios. '.$ex->message;
 					}
 				}else{
 					if(strlen($this->estado) >0 ){
