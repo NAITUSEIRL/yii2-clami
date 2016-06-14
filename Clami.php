@@ -177,13 +177,13 @@ class Clami extends Component{
 						$validator = new \yii\validators\UrlValidator();
 						$validatorNum = new \yii\validators\NumberValidator();
 
-						if(!$validator->validate($this->pdf, $this->errors)){
+						if(!$validator->validate($this->pdf, $this->errors[])){
 							throw new \Exception('error en valor del campo Pdf');
 						}
-						if(!$validator->validate($this->xml, $this->errors)){
+						if(!$validator->validate($this->xml, $this->errors[])){
 							throw new \Exception('error en valor del campo xml');
 						}
-						if(!$validatorNum->validate($this->folio, $this->errors)){
+						if(!$validatorNum->validate($this->folio, $this->errors[])){
 							throw new \Exception('error en valor del campo Folio');
 						}
 						$this->result_ok = true;
