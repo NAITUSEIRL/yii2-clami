@@ -10,13 +10,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist jotapeserra/yii2-clami "*"
+php composer.phar require --prefer-dist NAITUSEIRL/yii2-clami "*"
 ```
 
 or add
 
 ```
-"jotapeserra/yii2-clami": "*"
+"NAITUSEIRL/yii2-clami": "*"
 ```
 
 to the require section of your `composer.json` file.
