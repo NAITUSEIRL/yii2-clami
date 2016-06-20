@@ -131,7 +131,9 @@ class Clami extends Component{
 				"GiroEmis" => "SERVICIOS INTEGRALES DE INFORMATICA",
 				"CmnaOrigen" => "SAN BERNARDO",
 				"RznSoc" => "CONTACTO INFORMÁTICA LIMITADA",
-				"DirOrigen" => "AV. ARGENTINA 515"
+				"DirOrigen" => "AV. ARGENTINA 515",
+				'CdgVendedor' => "Vendedor datos de prueba",
+
 			];
 			$this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
 		}
