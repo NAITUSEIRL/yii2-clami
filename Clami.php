@@ -15,10 +15,27 @@ class Clami extends Component{
 	/**
      * @var string
      */
-    public $token;
-    public $host;
-    public $port;
-    public $api_version;
+    protected $token;
+    protected $host;
+    protected $port;
+    protected $api_version;
+	protected $testData;
+
+
+	/**
+	 *
+	 * @var array([
+			'rutEmisor' => '76409739-4',
+			'razSoc' => 'CTM Group SpA', //solo para identificarlo en la configuracion
+			'token' => 'Token 654832f80841ded26f9386d6130a7dd9e1fd6429',
+			'host' => 'http://clami.cl',
+			'port' => 9000,
+			'api_version' => 'v2',
+			'testData' => true,
+		],
+	 */
+	public $perfiles = array();
+
 	public $enviarDte = 'enviar/dte';
 	public $curl;
 	public $jsonData;
@@ -27,8 +44,8 @@ class Clami extends Component{
 	public $result_ok;
 	public $result_documento;
 	public $result_info;
-	public $testData;
 	public $jsonEncodeOption;
+
 
 	public $codigo;
 	public $estado;
@@ -39,23 +56,33 @@ class Clami extends Component{
 
 
 	public function init() {
-        if (empty($this->token)) {
-            throw new InvalidConfigException('You must set token to authenticate in Clami.');
-        }
-        if (empty($this->host)) {
-			$this->host = 'http://clami.cl';
-        }
-        if (empty($this->port)) {
-			$this->port = 8000;
-        }
-        if (empty($this->api_version)) {
-			$this->api_version = 'v2';
-        }
+        if(count($this->perfiles) == 0 ){
+            throw new InvalidConfigException('You must set at least 1 profile to Clami.');
+		}else{
+			//datos por defecto para cada perfil
+			foreach ($this->perfiles as $perfil) {
+				if (empty($perfil['rutEmisor'])) {
+					throw new InvalidConfigException('You must set rutEmisor to identify a profile with Clami.');
+				}
+				if (empty($perfil['token'])) {
+					throw new InvalidConfigException('You must set token to authenticate in Clami.');
+				}
+				if (empty($perfil['host'])) {
+					$perfil['host'] = 'http://clami.cl';
+				}
+				if (empty($perfil['port'])) {
+					$perfil['port'] = 8000;
+				}
+				if (empty($perfil['api_version'])) {
+					$perfil['api_version'] = 'v2';
+				}
+				if (empty($perfil['testData'])) {
+					$perfil['testData'] = false;
+				}
+			}
+		}
         if (empty($this->enviarDte)) {
 			$this->enviarDte = 'enviar/dte';
-        }
-        if (empty($this->testData)) {
-			$this->testData = false;
         }
         if (empty($this->jsonEncodeOption)) {
 			$this->jsonEncodeOption = JSON_UNESCAPED_UNICODE;
@@ -100,10 +127,25 @@ class Clami extends Component{
 		$this->errors = [];
 	}
 
+	protected function loadPerfil($rutEmisor) {
+		foreach ($this->perfiles as $perfil) {
+			if($perfil['rutEmisor'] === $rutEmisor){
+				$this->token = $perfil['token'];
+				$this->host = $perfil['host'];
+				$this->port = $perfil['port'];
+				$this->api_version = $perfil['api_version'];
+				$this->testData = $perfil['testData'];
+				\Yii::trace('Clami - Perfil cargado Rut:'.$rutEmisor,'Clami');
+			}
+		}
+		throw new InvalidConfigException('Couldnt fint rutEmisor'.$rutEmisor.' on the profiles settings.');
+	}
+
 
 	public function enviarDte($data, $format = 'json') {
 		//limpiar respuestas
 		$this->resetValues();
+
 
 		//preparar datos
 		if($format != 'json'){
@@ -112,6 +154,11 @@ class Clami extends Component{
 			$this->jsonData = $data;
 		}
 		\Yii::trace('Json de envio:'.$this->jsonData, 'Clami'.__METHOD__);
+
+		//cargar el parfil de Clami segun rutEmisor
+		$phpData = Json::decode($this->jsonData);
+		$this->loadPerfil($phpData['Caratula']['RutEmisor']);
+
 
 		//testData
 		if($this->testData){
