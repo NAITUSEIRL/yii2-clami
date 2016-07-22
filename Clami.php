@@ -129,7 +129,7 @@ class Clami extends Component{
 
 	protected function loadPerfil($rutEmisor) {
 		foreach ($this->perfiles as $perfil) {
-			if($perfil['rutEmisor'] === $rutEmisor){
+			if($perfil['rutEmisor'] == $rutEmisor){
 				$this->token = $perfil['token'];
 				$this->host = $perfil['host'];
 				$this->port = $perfil['port'];
