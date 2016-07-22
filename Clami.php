@@ -138,7 +138,7 @@ class Clami extends Component{
 				\Yii::trace('Clami - Perfil cargado Rut:'.$rutEmisor,'Clami');
 			}
 		}
-		throw new InvalidConfigException('Couldnt fint rutEmisor '.$rutEmisor.' on the profiles settings.'.print_r( $this->perfiles, true);
+		throw new InvalidConfigException('Couldnt fint rutEmisor '.$rutEmisor.' on the profiles settings.'.print_r( $this->perfiles, true));
 		);
 	}
 
