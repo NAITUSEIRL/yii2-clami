@@ -62,7 +62,7 @@ class Clami extends Component {
 	    'enableTestData',
 	];
 	foreach ($mandatoryParams as $param) {
-	  if (!array_key_exists($param, $perfil) || empty($perfil[$param])) {
+	  if (!array_key_exists($param, $perfil) || !isset($perfil[$param])) {
 	    throw new InvalidConfigException('You must set Mandatory parameter '.$param.' in perfil: '.print_r($perfil, true));
 	  }
 	  
