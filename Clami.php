@@ -128,7 +128,7 @@ class Clami extends Component {
   public function enviarDte($data, $format = 'json') {
     //limpiar respuestas
     $this->resetValues();
-
+    
 
     //preparar datos
     if ($format != 'json') {
@@ -169,6 +169,10 @@ class Clami extends Component {
       $this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
       \Yii::trace('Json de envio final test:' . $this->jsonData, 'Clami' . __METHOD__);
     }else{
+        //RutEnvia se pone a mano, es el due;o del certificado para firmar
+        $phpData = Json::decode($this->jsonData);
+        $data['Caratula']["RutEnvia"] = $this->testData['RutEnvia'];
+        $this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
         \Yii::trace('Json de envio final produccion:' . $this->jsonData, 'Clami' . __METHOD__);
     }
 
