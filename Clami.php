@@ -56,7 +56,7 @@ class Clami extends Component {
       foreach ($this->perfiles as $perfil) {
 	$mandatoryParams = [
 	    'rutEmisor',
-	    'rutEnvia',
+	    'RutEnvia',
 	    'token',
 	    'urlEnviarDte',
 	    'enableTestData',
