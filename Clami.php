@@ -171,7 +171,7 @@ class Clami extends Component {
     }else{
         //RutEnvia se pone a mano, es el due;o del certificado para firmar
         $phpData = Json::decode($this->jsonData);
-        $data['Caratula']["RutEnvia"] = $this->testData['RutEnvia'];
+        $phpData['Caratula']["RutEnvia"] = $this->perfilCargado['RutEnvia'];
         $this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
         \Yii::trace('Json de envio final produccion:' . $this->jsonData, 'Clami' . __METHOD__);
     }
