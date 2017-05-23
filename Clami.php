@@ -168,6 +168,8 @@ class Clami extends Component {
 
       $this->jsonData = Json::encode($phpData, $this->jsonEncodeOption);
       \Yii::trace('Json de envio final test:' . $this->jsonData, 'Clami' . __METHOD__);
+    }else{
+        \Yii::trace('Json de envio final produccion:' . $this->jsonData, 'Clami' . __METHOD__);
     }
 
     //envio a Clami
